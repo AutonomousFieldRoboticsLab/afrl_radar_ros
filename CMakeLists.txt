@@ -204,6 +204,7 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+link_directories(dependencies)
 include_directories(include ${catkin_INCLUDE_DIRS})
-add_executable(aflr_radar src/radarnode.cpp)
-target_link_libraries(aflr_radar ${catkin_LIBRARIES})
+add_executable(afrl_radar src/radarnode.cpp)
+target_link_libraries(afrl_radar ${catkin_LIBRARIES} PI_Radar pthread glog usbcan)
