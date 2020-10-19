@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   MWRadar mwRadar;
   vector<MWR_Data> mwr_data;
 
-  while(mwr_data.size() == 0){
+  while (mwr_data.size() == 0 && ros::ok()) {
       ros::Duration(0.1).sleep();
       mwRadar.Read(mwr_data,10);
   }
