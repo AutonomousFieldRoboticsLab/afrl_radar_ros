@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: afrl_radar
-Description: Description of afrl_radar
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
