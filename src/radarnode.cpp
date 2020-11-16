@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
   ros::init(argc, argv, "radar_node");
   ros::NodeHandle nh;
   ros::Publisher pub = nh.advertise<sensor_msgs::LaserScan> ("scan",10);
+  ros::Rate loop_rate(10);
 
   MWRadar mwRadar;
   vector<MWR_Data> mwr_data;
@@ -24,23 +25,39 @@ int main(int argc, char *argv[]) {
 
   sensor_msgs::LaserScan scan;
   scan.header.frame_id = "laser_frame";
-  scan.angle_min = -M_PI / 3.0;
-  scan.angle_max = M_PI / 3.0;
-  scan.range_min = 0.0;
-  scan.range_max = 20.0;
-  scan.angle_increment = M_PI / 180.0;
+  scan.angle_min = -M_PI / 3.0; // radians
+  scan.angle_max = M_PI / 3.0; // radians
+  scan.range_min = 0.0; // meters
+  scan.range_max = 100.0; // meters
+  scan.angle_increment = M_PI / 180.0; // radians
 
-  ros::Rate loop_rate(20);
+  scan.ranges.resize(121, NAN);
+  scan.intensities.resize(121, NAN);
 
   while (ros::ok()) {
     mwRadar.Read(mwr_data,10);
-    scan.ranges.resize(mwr_data.size());
-    scan.intensities.resize(mwr_data.size());
-
+    std::fill(scan.ranges.begin(), scan.ranges.end(), NAN);
+    std::fill(scan.intensities.begin(), scan.intensities.end(), NAN);
+    
+    // cout << "size: " << mwr_data.size() << endl;
     for (int i=0; i<mwr_data.size(); ++i) {
-      scan.header.stamp = ros::Time::now();
-      scan.ranges[i] = mwr_data[i].Range;
+      MWR_Data current = mwr_data[i];
+      // TODO: this will overwrite data if the angles are too close together
+      int index = 120 - (round(current.Azimuth) + 60);
+      // TODO: figure out when this is true
+      if (index < 0 || 120 < index) continue;
+      
+      // cout << "range[" << i << "] = "
+      //   << "{ range = " << current.Range
+      //   << ", azimuth = " << current.Azimuth
+      //   << ", power = " << current.Power
+      //   << ", index = " << index
+      //   << " }" << endl;
+      
+      scan.ranges[index] = current.Range;
+      scan.intensities[index] = current.Power;
     }
+    scan.header.stamp = ros::Time::now();
 
     pub.publish(scan);
     ros::spinOnce();
