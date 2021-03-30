@@ -1,2 +1,1 @@
-KERNEL=="ttyUSB0", SYMLINK+="ttyUSBgps" 
 ATTRS{idVendor}=="0471", ATTRS{idProduct}=="1200", MODE:="0666"
