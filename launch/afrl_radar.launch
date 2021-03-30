@@ -1,0 +1,7 @@
+<launch>
+  <node
+    pkg="afrl_radar_ros"
+    type="afrl_radar_ros"
+    name="afrl_radar"
+  />
+</launch>
