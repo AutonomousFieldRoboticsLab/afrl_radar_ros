@@ -2,7 +2,7 @@
 
 ## Platform: Ubutnu 16.04 with ROS Kinetic
 
-## Requirments:
+## Requirements:
 
 - radar_msgs
 
