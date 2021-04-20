@@ -1,6 +1,6 @@
 # afrl_radar_ros
 
-## Platform: Ubutnu 16.04 with ROS Kinetic
+## Platform: Ubuntu 16.04 with ROS Kinetic
 
 ## Requirements:
 
